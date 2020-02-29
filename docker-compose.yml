@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  app:
+    build: ./ 
+    ports:
+      - "3000:8080"
+    links:
+      - database
+      - cache
+    volumes:
+      - .:/usr/src/app
+    env_file: .env
+    depends_on:
+      - database
+      - cache
+     
+  database:
+    image: mongo
+
+  cache:
+    image: redis

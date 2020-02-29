@@ -1,0 +1,27 @@
+
+
+<html>
+    <head>
+        <title>Restaurants</title>
+    </head>
+    <body>
+        <div>
+            Find Restaurants by location
+            <input type="search" id="address-input" placeholder="Start typing an location..." />
+        </div>  
+        
+        <script src="https://cdn.jsdelivr.net/places.js/1/places.min.js"></script>
+        <script>
+        var placesAutocomplete = places({
+            appId: 'plRDXXI1M7AL',
+            apiKey: '4c961808fb934d14b766284fe96a957c',
+            container: document.querySelector('#address-input'),
+        });
+        
+        placesAutocomplete.on("change", function resultSelected(e) {
+            console.log(e.suggestion.latlng.lng || "");
+            console.log(e.suggestion.latlng.lat || "");
+        })
+        </script>
+    </body>
+</html>
