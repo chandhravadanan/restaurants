@@ -3,12 +3,19 @@
 <html>
     <head>
         <title>Restaurants</title>
+        <link rel="stylesheet" type="text/css" href="/css/styles.css">
     </head>
     <body>
-        <div>
-            Find Restaurants by location
-            <input type="search" id="address-input" placeholder="Start typing an location..." />
-        </div>  
+        <div id="wrapper">
+            <div class="page-header">
+                <h2>Restaurants Finder</h2>
+                <a href="/signin.html">Signin</a>
+            </div>
+            <div class="page-container">
+                <input type="search" id="address-input" placeholder="Start typing an location..." />
+                <div id="results" class="data-table"></div>
+            </div>
+        </div>
         
         <script src="https://cdn.jsdelivr.net/places.js/1/places.min.js"></script>
         <script>
@@ -18,10 +25,52 @@
             container: document.querySelector('#address-input'),
         });
         
-        placesAutocomplete.on("change", function resultSelected(e) {
-            console.log(e.suggestion.latlng.lng || "");
-            console.log(e.suggestion.latlng.lat || "");
+        placesAutocomplete.on("change", function(e) {
+            let lng = e.suggestion.latlng.lng || ""
+            let lat = e.suggestion.latlng.lat || ""
+            if(!lng || !lat){
+                return
+            }
+            let url = '/restaurants/nearby?lng='+lng+'&lat='+lat+'&radius=1000'
+            fetch(url)
+                .then((response) => { 
+                    return response.json();
+                }).then((restaurants)=>{
+                    console.log(restaurants)
+                    if(restaurants.length>0){
+                        renderResults(restaurants)
+                    }
+                })
         })
+
+        function renderResults(restaurants){
+            let tbl = '<table border="1" cellpadding="7" cellspacing="7">'
+            tbl += includeHeader()
+            let index=0
+            all = restaurants.map((each)=>{
+                let nonveg = each.nonveg?'Yes':'No'
+                index+=1
+                return '<tr>\
+                    <td width="50px">'+index+'</td>\
+                    <td>'+each.name+'</td>\
+                    <td>'+each.area+'</td>\
+                    <td>'+nonveg+'</td>\
+                    </tr>'
+            })
+            tbl+= all.join('')
+            tbl+='</table>'
+            let ele = document.getElementById("results");
+            ele.innerHTML = tbl
+        }
+
+        function includeHeader(){
+            return '<tr>\
+                    <th width="50px">No</th>\
+                    <th>Name</th>\
+                    <th>Area</th>\
+                    <th>Non-vegetarian</th>\
+                </tr>'
+        }
         </script>
     </body>
 </html>

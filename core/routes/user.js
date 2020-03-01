@@ -29,7 +29,8 @@ router.get("/restaurants/nearby", (req, res)=>{
                 $geometry: point,
                 $maxDistance: radius * 1000    // searching in kilometer radius
             }
-        }
+        },
+        active : true
     }, function(err, docs) {
         res.emit('sendres', err, docs)
     })
