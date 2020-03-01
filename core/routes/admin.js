@@ -7,7 +7,6 @@ var util = require('./../util')
 var router = express.Router();
 
 function adminAuthChecker(req, res, next){
-    console.log(req.isAdmin)
     if(req.isAdmin){
         next()
     }else{

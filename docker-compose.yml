@@ -20,3 +20,16 @@ services:
 
   cache:
     image: redis
+
+  test:
+    build: ./ 
+    command: npm run test
+    links:
+      - database
+      - cache
+    volumes:
+      - .:/usr/src/app
+    env_file: .env
+    depends_on:
+      - database
+      - cache

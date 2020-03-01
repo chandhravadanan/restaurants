@@ -31,7 +31,6 @@ router.get("/restaurants/nearby", (req, res)=>{
             }
         }
     }, function(err, docs) {
-        console.log(err, docs)
         res.emit('sendres', err, docs)
     })
 })

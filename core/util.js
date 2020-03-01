@@ -10,13 +10,14 @@ function sendRes(err, data){
 }
 
 function sendErrorResponse(res, resCode, err){
-    console.log(err)
+    console.log(err.message)
     res.statusCode = resCode
     res.end(JSON.stringify({message : err.message}))
 }
 
 function sendResponse(res, resCode, data){
     res.statusCode = resCode
+    res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify(data))
 }
 

@@ -21,6 +21,12 @@ app.use((req, res, next)=>{
 
 app.use(routes)
 
+app.use((err, req, res, next)=>{
+    console.log(req.url +':'+ err.message)
+    res.statusCode = 400
+    res.end(JSON.stringify({message : err.message}))
+})
+
 app.listen(8080, ()=>{
     console.log('Application started running in 8080')
 });
