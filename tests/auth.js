@@ -41,4 +41,13 @@ describe('Login authentication', ()=>{
         })
     })
 
+    describe('GET /signout', ()=>{
+        it('should invalidate jwt cookie', (done)=>{
+            request(app)
+                .get('/signout')
+                .expect('Set-Cookie', /token=/)
+                .expect(302, done)
+        })
+    })
+
 })

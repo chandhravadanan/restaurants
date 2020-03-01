@@ -8,7 +8,16 @@ describe('Restaurants', ()=>{
         it('should get html home page', (done)=>{
             request(app)
                 .get('/')
-                .expect('Content-Type', 'text/html; charset=UTF-8')
+                .expect('Content-Type', /html/)
+                .expect(200, done);
+        })
+    })
+
+    describe('GET /signin', ()=>{
+        it('should get signin page', (done)=>{
+            request(app)
+                .get('/signin.html')
+                .expect('Content-Type', /html/)
                 .expect(200, done);
         })
     })

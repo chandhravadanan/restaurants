@@ -131,4 +131,25 @@ describe('CRUD Restaurants APIs ', ()=>{
             })
     })
 
+    it('GET /admin/dashboard should return html page', (done)=>{
+        request(app)
+            .get('/admin/dashboard')
+            .set('Cookie', 'token='+token)
+            .expect(200, done);
+    })
+
+    it('GET /admin/add should return html page', (done)=>{
+        request(app)
+            .get('/admin/add')
+            .set('Cookie', 'token='+token)
+            .expect(200, done);
+    })
+
+    it('GET /admin/edit should return html page', (done)=>{
+        request(app)
+            .get('/admin/edit')
+            .set('Cookie', 'token='+token)
+            .expect(200, done);
+    })
+
 })
