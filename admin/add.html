@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <title>Actions</title>
+        <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    </head>
+    <script>
+    </script>
+    <body>
+        <div id="wrapper">
+            <div class="page-header">
+                <h2>ADD Restaurants</h2>
+                <a href="/admin/dashboard">dashboard</a>
+                <a href="/signout">Signout</a>
+            </div>
+            <div class="page-data">
+                <form method="post" action="">
+                    <table cellpadding="11">
+                        <tr>
+                            <td class="label">Name</td><td><input type="text" id="name" required></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Area</td>
+                            <td>
+                                <input type="search" id="address-input" placeholder="Start typing an location..." />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Phone</td><td><input type="text" name="phone" required></td>
+                        </tr>
+                        <tr>
+                            <td class="label"></td>
+                            <td>
+                                &nbsp; <input type="button" name="submit" value="Save" onClick="addNew()">
+                                <input type="button" name="cancel" value="Cancel" class="cancel" onClick="cancelAdd()">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td><td><div id="message"></div></td>
+                        </tr>
+                </table>
+            </form>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/places.js/1/places.min.js"></script>
+        <script>
+            var lat, lng, area;
+            var placesAutocomplete = places({
+                appId: 'plRDXXI1M7AL',
+                apiKey: '4c961808fb934d14b766284fe96a957c',
+                container: document.querySelector('#address-input'),
+            });
+            
+            placesAutocomplete.on("change", function(e) {
+                lng = e.suggestion.latlng.lng || ""
+                lat = e.suggestion.latlng.lat || ""
+                area = e.suggestion.value || ""
+                console.log(area, lng, lat)
+            })
+
+            function cancel(){
+                window.location.href = '/admin/dashboard'
+            }
+
+            function addNew(){
+                let name = document.getElementById("name").value;
+                fetch('/restaurant', {
+                    method : 'POST',
+                    body: JSON.stringify({
+                        name : name,
+                        area : area,
+                        langitude : lng,
+                        latitude : lat
+                    })
+                }).then((response) => {
+                    if(response.status!=200){
+                        document.getElementById('message').innerText="Error"
+                    } 
+                    return response.json();
+                }).then((restaurant)=>{
+                    document.getElementById('message').innerText="Added"
+                })
+            }
+
+        </script>
+    </body>
+</html>

@@ -2,6 +2,7 @@
 var express = require('express');
 var Restaurants = require('./../model/restaurants')
 var util = require('./../util')
+var path = require('path')
 //var cache = require('./../cache/redis')
 
 var router = express.Router();
@@ -52,6 +53,12 @@ router.delete('/restaurant/:id', adminAuthChecker, (req, res)=>{
     Restaurants.findByIdAndUpdate(restaurantId, {active: false}, {new : true}, (err, docs)=>{
         res.emit('sendres', err, docs)
     })
+})
+
+router.get('/admin/:resource', adminAuthChecker, (req, res)=>{
+    let resource = req.params.resource
+    let fullPath = path.join(process.cwd(), 'admin', resource+'.html')
+    res.sendFile(fullPath)
 })
 
 

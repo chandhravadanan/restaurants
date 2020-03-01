@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <title>Actions</title>
+        <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    </head>
+    <script>
+        function includeHeader(){
+            return '<tr>\
+                    <th width="50px">No</th>\
+                    <th>Name</th>\
+                    <th>Area</th>\
+                    <th>Non-vegetarian</th>\
+                    <th>Actions</th>\
+                </tr>'
+        }
+
+        function goAddPage(){
+            window.location.href = '/admin/add'
+        }
+
+        function renderResults(restaurants){
+            let tbl = '<table border="1" cellpadding="7" cellspacing="7">'
+            tbl += includeHeader()
+            let index=0
+            all = restaurants.map((each)=>{
+                let nonveg = each.nonveg?'Yes':'No'
+                index+=1
+                return '<tr>\
+                    <td width="50px">'+index+'</td>\
+                    <td>'+each.name+'</td>\
+                    <td>'+each.area+'</td>\
+                    <td>'+nonveg+'</td>\
+                    <td><a class="a-inside edit" href="/admin/edit">Edit</a>\
+                        <a class="a-inside delete" href="#" onclick="deleteRes(\''+each._id+'\')">Delete</a>\
+                    </td></tr>'
+            })
+            tbl+= all.join('')
+            tbl+='</table>'
+            let ele = document.getElementById("results");
+            ele.innerHTML = tbl
+        }
+
+        function fecthAll(){
+            fetch("/restaurants")
+            .then((response) => { 
+                return response.json();
+            }).then((restaurants)=>{
+                if(restaurants.length>0){
+                    renderResults(restaurants)
+                }
+            })
+        }
+
+        function deleteRes(docId){
+            fetch('/restaurant/'+docId, {
+                method : 'DELETE'
+            }).then((response)=>{
+                fecthAll()
+            })
+        }
+
+        fecthAll()
+    </script>
+    <body>
+        <div id="wrapper">
+            <div class="page-header">
+                <h2>Restaurants CRUD</h2>
+                <a href="/">Signout</a>
+            </div>
+            <div class="page-data">
+                <div class="data-btn">
+                  <button onclick="goAddPage()">+ Add</button>
+                </div>
+            <div class="page-container">
+                <div id="results" class="data-table"></div>
+            </div>
+            </div>
+        </div>
+    </body>
+</html>

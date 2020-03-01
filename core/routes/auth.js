@@ -19,7 +19,7 @@ function setJwtCookie(res){
     let expires = "; expires="+date.toGMTString();
     let cookieStr= 'token='+token+ expires +';path=/;'
     res.setHeader("Set-Cookie", cookieStr);
-    res.redirect('/admin');
+    res.redirect('/admin/dashboard');
 }
 
 router.post('/signin', (req, res)=>{
@@ -38,6 +38,13 @@ router.post('/signin', (req, res)=>{
             util.sendResponse(res, 401, {status : 'invalid credential'})
         }
     })
+})
+
+router.get('/signout', (req, res)=>{
+    let expires = "; expires=-1"
+    let cookieStr= 'token='+ expires +';path=/;'
+    res.setHeader("Set-Cookie", cookieStr);
+    res.redirect('/');
 })
 
 module.exports = router;

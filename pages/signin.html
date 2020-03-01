@@ -1,4 +1,40 @@
 <html>
-    <head>Signin page</head>
-    <body>Under Construction</body>
+    <head>
+        <title>Signin</title>
+        <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    </head>
+    <script>
+        function signin(){
+            let username = document.getElementById('username').value
+            let password = document.getElementById('password').value
+            let url = '/signin?username='+username+'&password='+password
+            fetch(url, {
+                method: 'POST',
+            }).then((response)=>{
+                if(response.status==401){
+                    document.getElementById('error').innerText="Invalid credential"
+                }else if(response.redirected){
+                    window.location.href = response.url;
+                }
+            })
+        }
+    </script>
+    <body>
+        <div id="wrapper">
+            <div class="page-header">
+                <h2>Signin</h2>
+                <a href="/">Home</a>
+            </div>
+            <div class="page-container">
+                <form>
+                    Username <br>
+                    <input type="text" id="username" required/>  <br>
+                    Password <br>
+                    <input type="password" id="password" required/> <br><br>
+                    <input type="button" value="submit" onclick="signin()"/> <br><br>
+                    <div id="error"></div>
+                </form>         
+            </div>
+        </div>
+    </body>
 </html>
