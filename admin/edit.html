@@ -25,7 +25,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="label">Phone</td><td><input type="text" name="phone"></td>
+                            <td class="label">Phone</td><td><input type="text" id="phone"></td>
                         </tr>
                         <tr>
                             <td class="label"></td>
@@ -47,10 +47,12 @@
             let docid = params.get("id")
             let name = params.get("name")
             let curArea = params.get("area")
+            let curPhone = params.get("phone")
 
             function update(){
                 let name = document.getElementById('name').value
-                data= {name : name}
+                let phone = document.getElementById('phone').value
+                data= {name : name, phone: phone}
                 fetch('/restaurant/'+docid, {
                     method : 'PUT',
                     body : JSON.stringify(data)
@@ -73,6 +75,7 @@
             function loadRestaurantInfo(){
                 document.getElementById('name').value = name
                 document.getElementById('area').value = curArea
+                document.getElementById('phone').value = curPhone
             }
 
             loadRestaurantInfo()

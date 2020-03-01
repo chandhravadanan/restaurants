@@ -60,7 +60,7 @@ describe('CRUD Restaurants APIs ', ()=>{
                 "area" : "chennai",
                 "langitude" : 80.2838,
                 "latitude" : 18.0801,
-                "nonveg" : false
+                "phone" : "1233456789"
             })
             .expect(200)
             .then((res)=>{

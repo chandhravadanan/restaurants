@@ -26,7 +26,6 @@ var userSchema = new mongo.Schema(schema)
 var Users = mongo.model('users', userSchema);
 
 function checkAddAdminUser(){
-    console.log( process.env.ADMIN_USER_NAME, process.env.ADMIN_USER_PASSWORD_HASH)
     Users.find({username : process.env.ADMIN_USER_NAME}, (err, doc)=>{
         if(!err || doc.length<=0){
             let user = new Users()

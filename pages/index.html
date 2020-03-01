@@ -31,7 +31,7 @@
             if(!lng || !lat){
                 return
             }
-            let url = '/restaurants/nearby?lng='+lng+'&lat='+lat+'&radius=1000'
+            let url = '/restaurants/nearby?lng='+lng+'&lat='+lat+'&radius=10'
             fetch(url)
                 .then((response) => { 
                     return response.json();
@@ -48,13 +48,12 @@
             tbl += includeHeader()
             let index=0
             all = restaurants.map((each)=>{
-                let nonveg = each.nonveg?'Yes':'No'
                 index+=1
                 return '<tr>\
                     <td width="50px">'+index+'</td>\
                     <td>'+each.name+'</td>\
                     <td>'+each.area+'</td>\
-                    <td>'+nonveg+'</td>\
+                    <td>'+each.phone+'</td>\
                     </tr>'
             })
             tbl+= all.join('')
@@ -68,7 +67,7 @@
                     <th width="50px">No</th>\
                     <th>Name</th>\
                     <th>Area</th>\
-                    <th>Non-vegetarian</th>\
+                    <th>Phone</th>\
                 </tr>'
         }
         </script>

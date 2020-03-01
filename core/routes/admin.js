@@ -3,7 +3,7 @@ var express = require('express');
 var Restaurants = require('./../model/restaurants')
 var util = require('./../util')
 var path = require('path')
-//var cache = require('./../cache/redis')
+var restaurantGeoCache = require('./../cache/restaurant')
 
 var router = express.Router();
 
@@ -34,8 +34,8 @@ router.post('/restaurant', adminAuthChecker, (req, res)=>{
         throw new Error("INVALID LANGITUDE")
 
     Restaurants.add(req.body, (err, info)=>{
-        //if(info)
-            //cache.addRestaurant(info)
+        if(info && info.id)
+            restaurantGeoCache.addOrUpdate(info)
 
         res.emit('sendres', err, info)
     })
@@ -43,15 +43,21 @@ router.post('/restaurant', adminAuthChecker, (req, res)=>{
 
 router.put('/restaurant/:id', adminAuthChecker, (req, res)=>{
     let restaurantId = req.params.id
-    Restaurants.findByIdAndUpdate(restaurantId, req.body, {new : true}, (err, docs)=>{
-        res.emit('sendres', err, docs)
+    Restaurants.findByIdAndUpdate(restaurantId, req.body, {new : true}, (err, info)=>{
+        if(info && info.id)
+            restaurantGeoCache.addOrUpdate(info)
+
+        res.emit('sendres', err, info)
     })
 })
 
 router.delete('/restaurant/:id', adminAuthChecker, (req, res)=>{
     let restaurantId = req.params.id
-    Restaurants.findByIdAndUpdate(restaurantId, {active: false}, {new : true}, (err, docs)=>{
-        res.emit('sendres', err, docs)
+    Restaurants.findByIdAndUpdate(restaurantId, {active: false}, {new : true}, (err, info)=>{
+        if(info && info.id)
+            restaurantGeoCache.removeRestaurant(info)
+
+        res.emit('sendres', err, info)
     })
 })
 

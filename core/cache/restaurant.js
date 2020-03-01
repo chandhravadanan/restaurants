@@ -4,9 +4,10 @@ const redis = new Redis(6379, "cache")
 
 module.exports = redis;
 
-let geoCacheKey = "restaurants_geo"
+let geoCacheKey = "restaurants_geo_positions"
 
-function addRestaurant(restaurant){
+//will update if exist
+function addOrUpdate(restaurant){
     let restaurantId = restaurant._id
     let latitude = restaurant.location.coordinates[0]
     let langitude = restaurant.location.coordinates[1]
@@ -18,13 +19,13 @@ function getNearByRestaurants(latitude, langitude, radius){
     return redis.georadius(geoCacheKey, latitude, langitude, radius, 'km')
 }
 
-function clearRestaurants(){
-    return redis.del(geoCacheKey)
+function removeRestaurant(restaurant){
+    return redis.zrem(geoCacheKey, restaurant._id)
 }
 
 
 module.exports = {
-    addRestaurant,
+    addOrUpdate,
     getNearByRestaurants,
-    clearRestaurants
+    removeRestaurant,
 }

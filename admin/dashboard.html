@@ -9,7 +9,7 @@
                     <th width="50px">No</th>\
                     <th>Name</th>\
                     <th>Area</th>\
-                    <th>Non-vegetarian</th>\
+                    <th>Phone</th>\
                     <th>Actions</th>\
                 </tr>'
         }
@@ -23,14 +23,14 @@
             tbl += includeHeader()
             let index=0
             all = restaurants.map((each)=>{
-                let nonveg = each.nonveg?'Yes':'No'
-                let editUrl = '/admin/edit?id='+each._id+'&name='+each.name+'&area='+each.area
+                let editUrl = '/admin/edit?id='+each._id+'&name='+each.name
+                        +'&area='+each.area+'&phone='+each.phone
                 index+=1
                 return '<tr>\
                     <td width="50px">'+index+'</td>\
                     <td>'+each.name+'</td>\
                     <td>'+each.area+'</td>\
-                    <td>'+nonveg+'</td>\
+                    <td>'+each.phone+'</td>\
                     <td><a class="a-inside edit" href="'+editUrl+'">Edit</a>\
                         <a class="a-inside delete" href="#" onclick="deleteRes(\''+each._id+'\')">Delete</a>\
                     </td></tr>'

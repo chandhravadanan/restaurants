@@ -30,8 +30,8 @@ const schema = {
     active : {
         type : Boolean
     },
-    nonveg : {
-        type : Boolean,
+    phone : {
+        type : String,
         required : true
     }
 }
@@ -45,7 +45,12 @@ restaurantSchema.index({
 
 var Restaurants = mongo.model('restaurants', restaurantSchema);
 
-
+Restaurants.fetchByIds = function(ids, cb){
+    objectIds = ids.map((each)=>{
+        return mongoose.Types.ObjectId(each)
+    })
+    Restaurants.find({'_id': { $in: objectIds}}, cb) 
+}
 
 Restaurants.add = function(info, cb){
     let restaurant = new Restaurants()
@@ -57,7 +62,7 @@ Restaurants.add = function(info, cb){
     }
     restaurant.location = loc
     restaurant.active = true
-    restaurant.nonveg = info.nonveg || false
+    restaurant.phone = info.phone
     restaurant.save(cb)
 }
 

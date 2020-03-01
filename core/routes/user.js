@@ -2,21 +2,12 @@
 
 var express = require('express');
 var Restaurants = require('./../model/restaurants')
-//var cache = require('./../cache/redis')
+var RestaurantsGeoCache = require('./../cache/restaurant')
 
 var router = express.Router();
 
-router.get("/restaurants/nearby", (req, res)=>{
 
-    let lng = parseFloat(req.query.lng)
-    let lat = parseFloat(req.query.lat)
-    let radius = parseInt(req.query.radius) || 10
-
-    if(!lng || (lng<-180 || lng>180))
-        throw new Error("INVALID LANGITUDE")
-    if(!lat || (lat<-90 || lat>90))
-        throw new Error("INVALID LATITUDE")
-
+function queryNearBy(lng, lat, radius, cb){
     var point = {
         type: "Point",
         coordinates: [lng, lat]
@@ -32,7 +23,32 @@ router.get("/restaurants/nearby", (req, res)=>{
         },
         active : true
     }, function(err, docs) {
-        res.emit('sendres', err, docs)
+        cb(err, docs)
+    })
+}
+
+router.get("/restaurants/nearby", (req, res)=>{
+
+    let lng = parseFloat(req.query.lng)
+    let lat = parseFloat(req.query.lat)
+    let radius = parseInt(req.query.radius) || 10
+
+    if(!lng || (lng<-180 || lng>180))
+        throw new Error("INVALID LANGITUDE")
+    if(!lat || (lat<-90 || lat>90))
+        throw new Error("INVALID LATITUDE")
+
+    let cache = RestaurantsGeoCache.getNearByRestaurants(lng, lat, radius)
+    cache.then((restaurantIds)=>{
+        if(restaurantIds && restaurantIds.length>0){
+            Restaurants.fetchByIds(restaurantIds, (err, docs)=>{
+                res.emit('sendres', err, docs)
+            })
+            return;
+        }
+        queryNearBy(lng, lat, radius, (err, docs)=> {
+            res.emit('sendres', err, docs)
+        })
     })
 })
 
