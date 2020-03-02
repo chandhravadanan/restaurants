@@ -1,10 +1,9 @@
 version: '2'
 
 services:
-  app:
+  test:
     build: ./ 
-    ports:
-      - "3000:8080"
+    command: npm run test
     links:
       - database
       - cache
@@ -20,3 +19,5 @@ services:
 
   cache:
     image: redis
+
+  

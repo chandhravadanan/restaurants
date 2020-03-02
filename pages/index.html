@@ -37,9 +37,8 @@
                     return response.json();
                 }).then((restaurants)=>{
                     console.log(restaurants)
-                    if(restaurants.length>0){
-                        renderResults(restaurants)
-                    }
+                    renderResults(restaurants && restaurants.length>0 ?
+                                 restaurants : [])
                 })
         })
 

@@ -1,6 +1,6 @@
 # restaurants finder by geo location
 
-Node versio : 10  
+Node version : 10  
 Web framework : Express  
 Database : Mongodb ( geoNear, 2dsphere index )  
 Cache : redis ( geoadd, georadius )  
@@ -8,11 +8,12 @@ Authentication : JWT
   
 #Testing  
   
-docker-compose build test  
-docker-compose up test
+docker-compose -f docker-test.yml up
   
 #Run
   
-docker-compose build app  
-docker-compose up app  
+docker-compose app  
+
+
+
  
