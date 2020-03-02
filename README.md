@@ -12,7 +12,7 @@ docker-compose -f docker-test.yml up
   
 #Run
   
-docker-compose app  
+docker-compose up  
 
 
 
